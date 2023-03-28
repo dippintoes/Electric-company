@@ -7,9 +7,9 @@ import { RESPONSE_HANDLER } from "../../utility/Response-handler";
 
 const router = Router();
 
-router.get("/:id", validateWebToken, checkRole(["641988a2c3bac1ad2f2db6e4"]), async (req: Request, res: Response, next: NextFunction) => {
+router.get("/:id", validateWebToken, checkRole(["6422a6020b6aa8e8006f277a"]), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const result = await userServices.findOne({ _id: new mongoose.Types.ObjectId((req.params.id).toString()) })
+        const result = await userServices.findOne({ _id: new mongoose.Types.ObjectId((req.params.id).toString()), isDeleted: false })
         res.send(new RESPONSE_HANDLER(result));
     }
     catch (e) {
@@ -17,7 +17,7 @@ router.get("/:id", validateWebToken, checkRole(["641988a2c3bac1ad2f2db6e4"]), as
     }
 })
 
-router.delete("/:id", validateWebToken, checkRole(["641988a2c3bac1ad2f2db6e4"]), async (req: Request, res: Response, next: NextFunction) => {
+router.delete("/:id", validateWebToken, checkRole(["6422a6020b6aa8e8006f277a"]), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await userServices.deleteOne({ _id: req.params.id }, { $set: { isDeleted: true } });
         res.send(new RESPONSE_HANDLER(result));

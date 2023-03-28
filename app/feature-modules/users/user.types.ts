@@ -6,8 +6,11 @@ export interface IUser {
     email: string,
     password: string,
     role?: ObjectId,
-    meterType?: string,
-    bill?: number
+    meterType?: ObjectId | string,
+    bill_status?: ObjectId,
+    location: string,
+    bill?: number,
+    outstanding_bill?: number
 }
 
 export type Users = IUser[];

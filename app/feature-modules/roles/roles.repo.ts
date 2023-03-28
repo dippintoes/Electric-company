@@ -2,17 +2,21 @@ import { Types } from "mongoose";
 import { RoleModel } from "./roles.schema";
 import { IRole } from "./roles.types";
 
-const createRole=(role:IRole)=>RoleModel.create(role);
+const create = (role: IRole) => RoleModel.create(role);
 
-const deleteRole=(id:string)=>RoleModel.updateOne(
+const find = () => RoleModel.find();
+
+const deleteRole = (id: string) => RoleModel.updateOne(
     {
-    _id:new Types.ObjectId(id)
-    },{
-        isDeleted:true
+        _id: new Types.ObjectId(id)
+    },
+    {
+        isDeleted: true
     }
 )
 
 export default {
-    createRole,
+    create,
+    find,
     deleteRole
 }

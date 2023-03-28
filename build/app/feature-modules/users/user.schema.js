@@ -1,9 +1,10 @@
-import { Document, Schema, model } from "mongoose";
-import { IUser } from "./user.types";
-import { BaseSchema } from "../../utility/base-schema";
-import { Status } from "../status/status.types";
-
-const UserSchema = new BaseSchema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserModel = void 0;
+const mongoose_1 = require("mongoose");
+const base_schema_1 = require("../../utility/base-schema");
+const status_types_1 = require("../status/status.types");
+const UserSchema = new base_schema_1.BaseSchema({
     name: {
         type: String,
         required: true
@@ -17,12 +18,12 @@ const UserSchema = new BaseSchema({
         required: true
     },
     role: {
-        type: Schema.Types.ObjectId,
+        type: mongoose_1.Schema.Types.ObjectId,
         required: true,
         ref: "Roles"
     },
     meterType: {
-        type: Schema.Types.Mixed,
+        type: mongoose_1.Schema.Types.Mixed,
         required: false
     },
     bill: {
@@ -40,12 +41,9 @@ const UserSchema = new BaseSchema({
         required: false
     },
     bill_status: {
-        type: Schema.Types.ObjectId,
+        type: mongoose_1.Schema.Types.ObjectId,
         required: false,
-        default: Status.Pending
+        default: status_types_1.Status.Pending
     }
-})
-
-type UserDocument = Document & IUser;
-
-export const UserModel = model<UserDocument>("Users", UserSchema);
+});
+exports.UserModel = (0, mongoose_1.model)("Users", UserSchema);

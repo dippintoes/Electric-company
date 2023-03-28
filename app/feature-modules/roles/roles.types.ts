@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 export const Roles = {
-    ADMIN: new mongoose.mongo.ObjectId("641988a2c3bac1ad2f2db6e4"),
-    EMPLOYEE: new mongoose.mongo.ObjectId("641988c3c3bac1ad2f2db6e6"),
-    CLIENT: new mongoose.mongo.ObjectId("641988d1c3bac1ad2f2db6e8")
+    ADMIN: new mongoose.mongo.ObjectId("6422a6020b6aa8e8006f277a"),
+    EMPLOYEE: new mongoose.mongo.ObjectId("6422a60f0b6aa8e8006f277e"),
+    CLIENT: new mongoose.mongo.ObjectId("6422a6080b6aa8e8006f277c")
 }
 
 export interface IRole {

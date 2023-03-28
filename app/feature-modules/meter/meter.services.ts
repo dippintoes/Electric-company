@@ -9,7 +9,7 @@ const create = (meter: IMeter) => {
 
 const findAll = () => {
     const all_meters = meterRepo.find();
-    if (!all_meters) throw METER_RESPONSES.METER_NOT_FOUND;
+    if (!all_meters) throw METER_RESPONSES.NO_METERS_YET;
     return all_meters;
 }
 

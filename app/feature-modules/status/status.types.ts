@@ -1,11 +1,10 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 export interface IStatus {
-    status: String
+    name: String
 }
 
 export const Status = {
-    Pending: new mongoose.mongo.ObjectId("641aa4847e154eba8061f3f0"),
-    Approved: new mongoose.mongo.ObjectId("641aa4967e154eba8061f3f2"),
-    Rejected: new mongoose.mongo.ObjectId("641aa4a37e154eba8061f3f4")
+    Pending: new mongoose.mongo.ObjectId("6422bc8417ae93f043f9d93f"),
+    Paid: new mongoose.mongo.ObjectId("6422bca117ae93f043f9d941")
 }
