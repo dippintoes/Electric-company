@@ -18,13 +18,10 @@ const user_responses_1 = require("./user.responses");
 const meter_types_1 = require("../meter/meter.types");
 const status_types_1 = require("../status/status.types");
 const create = (user) => {
-    if (user.role) {
-        user.role = roles_types_1.Roles.ADMIN;
-    }
-    else if (!user.role && user.meterType) {
+    if (!user.role && user.meterType) {
         user.role = roles_types_1.Roles.CLIENT;
     }
-    else {
+    else if (!user.role) {
         user.role = roles_types_1.Roles.EMPLOYEE;
         user.bill_status = status_types_1.Status.Pending;
     }

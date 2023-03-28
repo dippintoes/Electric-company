@@ -3,8 +3,8 @@ import { NextFunction, Request, Response } from "express"
 export const checkRole=(roles:string[])=>{
     return (req:Request, res:Response, next:NextFunction)=>{
         try{
-            const {id,role}=res.locals.tokenId;
-            console.log(role,roles);
+            const {role}=res.locals.tokenId;
+            console.log(roles);
             for(let ele of roles){
                 if(ele===role){
                     console.log(role);

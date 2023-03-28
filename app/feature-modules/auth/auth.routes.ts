@@ -3,11 +3,13 @@ import authServices from "./auth.services";
 import { IUser } from "../users/user.types";
 import { CREATE_USER_VALIDATION, LOGIN_USER_VALIDATION } from "./auth.validations";
 import { RESPONSE_HANDLER } from "../../utility/Response-handler";
+import { checkRole } from "../../utility/check-role";
 
 const router = Router();
 
 router.post("/login", LOGIN_USER_VALIDATION, async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const { id } = res.locals;
         const result = await authServices.login(req.body);
         console.log(result);
         res.send(new RESPONSE_HANDLER(result));
@@ -17,7 +19,7 @@ router.post("/login", LOGIN_USER_VALIDATION, async (req: Request, res: Response,
     }
 })
 
-router.post("/register", CREATE_USER_VALIDATION, async (req: Request, res: Response, next: NextFunction) => {
+router.post("/register", CREATE_USER_VALIDATION, checkRole(["6422a6020b6aa8e8006f277a"]), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result: IUser = await authServices.register(req.body);
         res.send(new RESPONSE_HANDLER(result));

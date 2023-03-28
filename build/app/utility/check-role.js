@@ -4,8 +4,8 @@ exports.checkRole = void 0;
 const checkRole = (roles) => {
     return (req, res, next) => {
         try {
-            const { id, role } = res.locals.tokenId;
-            console.log(role, roles);
+            const { role } = res.locals.tokenId;
+            console.log(roles);
             for (let ele of roles) {
                 if (ele === role) {
                     console.log(role);

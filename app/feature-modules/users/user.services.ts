@@ -1,4 +1,4 @@
-import mongoose, { FilterQuery, UpdateQuery } from "mongoose";
+import { FilterQuery, UpdateQuery } from "mongoose";
 import { Roles } from "../roles/roles.types";
 import userRepo from "./user.repo";
 import { USER_REPONSES } from "./user.responses";
@@ -10,7 +10,7 @@ const create = (user: IUser) => {
     if (!user.role && user.meterType) {
         user.role = Roles.CLIENT;
     }
-    else if(!user.role){
+    else if (!user.role) {
         user.role = Roles.EMPLOYEE;
         user.bill_status = Status.Pending;
     }
