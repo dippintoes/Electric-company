@@ -4,6 +4,8 @@ import { IUser } from "../users/user.types";
 import { CREATE_USER_VALIDATION, LOGIN_USER_VALIDATION } from "./auth.validations";
 import { RESPONSE_HANDLER } from "../../utility/Response-handler";
 import { checkRole } from "../../utility/check-role";
+import { login_validator } from "../../utility/login-validator";
+import { validateWebToken } from "../../utility/web-token-validator";
 
 const router = Router();
 
@@ -19,7 +21,7 @@ router.post("/login", LOGIN_USER_VALIDATION, async (req: Request, res: Response,
     }
 })
 
-router.post("/register", CREATE_USER_VALIDATION, checkRole(["6422a6020b6aa8e8006f277a"]), async (req: Request, res: Response, next: NextFunction) => {
+router.post("/register", validateWebToken, checkRole(["6422a6020b6aa8e8006f277a"]), CREATE_USER_VALIDATION, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result: IUser = await authServices.register(req.body);
         res.send(new RESPONSE_HANDLER(result));

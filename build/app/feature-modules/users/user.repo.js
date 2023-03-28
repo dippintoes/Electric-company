@@ -19,6 +19,7 @@ const findOne = (filter) => __awaiter(void 0, void 0, void 0, function* () {
         throw { message: "Something went wrong" };
     }
 });
+const findAll = (filter) => user_schema_1.UserModel.find(filter);
 const updateOne = (id, update) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return yield user_schema_1.UserModel.findOneAndUpdate({ _id: id }, { $set: update });
@@ -31,6 +32,7 @@ const deleteOne = (filter, update) => user_schema_1.UserModel.findOneAndUpdate(f
 exports.default = {
     create,
     findOne,
+    findAll,
     updateOne,
     deleteOne
 };

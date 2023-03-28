@@ -10,7 +10,8 @@ export interface IUser {
     bill_status?: ObjectId,
     location: string,
     bill?: number,
-    outstanding_bill?: number
+    outstanding_bill?: number,
+    emp_id?: ObjectId
 }
 
 export type Users = IUser[];

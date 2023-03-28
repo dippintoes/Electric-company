@@ -7,6 +7,26 @@ import { RESPONSE_HANDLER } from "../../utility/Response-handler";
 
 const router = Router();
 
+router.get("/findAllClients", validateWebToken, checkRole(["6422a6020b6aa8e8006f277a"]), async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userServices.findAllClients();
+        res.send(new RESPONSE_HANDLER(result));
+    }
+    catch (e) {
+        next(e);
+    }
+})
+
+router.get("/findAllEmployees", validateWebToken, checkRole(["6422a6020b6aa8e8006f277a"]), async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userServices.findAllEmployees();
+        res.send(new RESPONSE_HANDLER(result));
+    }
+    catch (e) {
+        next(e);
+    }
+})
+
 router.get("/:id", validateWebToken, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = res.locals.tokenId;

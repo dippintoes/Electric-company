@@ -19,6 +19,24 @@ const user_services_1 = __importDefault(require("./user.services"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const Response_handler_1 = require("../../utility/Response-handler");
 const router = (0, express_1.Router)();
+router.get("/findAllClients", web_token_validator_1.validateWebToken, (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_services_1.default.findAllClients();
+        res.send(new Response_handler_1.RESPONSE_HANDLER(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+router.get("/findAllEmployees", web_token_validator_1.validateWebToken, (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_services_1.default.findAllEmployees();
+        res.send(new Response_handler_1.RESPONSE_HANDLER(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
 router.get("/:id", web_token_validator_1.validateWebToken, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = res.locals.tokenId;

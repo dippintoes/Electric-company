@@ -15,6 +15,8 @@ const findOne = async (filter: Partial<IUser>) => {
     }
 }
 
+const findAll = (filter: FilterQuery<IUser>) => UserModel.find(filter);
+
 const updateOne = async (id: string, update: Partial<IUser>) => {
     try {
         return await UserModel.findOneAndUpdate({ _id: id }, { $set: update });
@@ -30,6 +32,7 @@ const deleteOne = (filter: FilterQuery<IUser>, update: UpdateQuery<IUser>) =>
 export default {
     create,
     findOne,
+    findAll,
     updateOne,
     deleteOne
 }

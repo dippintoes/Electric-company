@@ -43,6 +43,11 @@ const UserSchema = new BaseSchema({
         type: Schema.Types.ObjectId,
         required: false,
         default: Status.Pending
+    },
+    emp_id: {
+        type: Schema.Types.ObjectId,
+        required: false,
+        ref: "Users"
     }
 })
 

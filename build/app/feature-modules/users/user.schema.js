@@ -44,6 +44,11 @@ const UserSchema = new base_schema_1.BaseSchema({
         type: mongoose_1.Schema.Types.ObjectId,
         required: false,
         default: status_types_1.Status.Pending
+    },
+    emp_id: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        required: false,
+        ref: "Users"
     }
 });
 exports.UserModel = (0, mongoose_1.model)("Users", UserSchema);
