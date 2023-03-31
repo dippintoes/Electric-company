@@ -1,8 +1,11 @@
 import { Application, NextFunction, Request, Response, json } from "express"
-import { routes } from "./route.data";
+import { excludedPaths, routes } from "./route.data";
 import { RESPONSE_HANDLER } from "../utility/Response-handler";
+import { authorize } from "../utility/web-token-validator";
 
 export const registerRoutes = (app: Application) => {
+    app.use(authorize(excludedPaths));
+
     app.use(json());
 
     for (let route of routes) {

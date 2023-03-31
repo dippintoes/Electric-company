@@ -13,7 +13,6 @@ const create = (user: IUser) => {
     }
     else if (!user.role) {
         user.role = Roles.EMPLOYEE;
-        user.bill_status = Status.Pending;
     }
     if (user.meterType === "Normal") {
         user.meterType = METER_TYPES.NORMAL

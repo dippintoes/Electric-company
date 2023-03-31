@@ -6,6 +6,6 @@ export interface IBill {
     reading: number,
     total_Bill: number,
     outStandingBill: number,
-    status: ObjectId,
+    payment_status: ObjectId,
     pics: string[]
 }

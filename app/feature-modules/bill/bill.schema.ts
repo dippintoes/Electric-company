@@ -1,6 +1,7 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 import { BaseSchema } from "../../utility/base-schema";
 import { Status } from "../status/status.types";
+import { IBill } from "./bill.types";
 
 const BillSchema = new BaseSchema({
     client_id: {
@@ -29,6 +30,11 @@ const BillSchema = new BaseSchema({
         ref: "Status"
     },
     pics: {
-
+        type: [String],
+        required: true
     }
 });
+
+type BillDocument = IBill & Document;
+
+export const BillModel = model<BillDocument>("Bill", BillSchema);

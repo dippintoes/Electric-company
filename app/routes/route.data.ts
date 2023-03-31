@@ -1,4 +1,4 @@
-import { Route, Routes } from "./route.types";
+import { Route, Routes, excludedPath } from "./route.types";
 import AuthRouter from "../feature-modules/auth/auth.routes";
 import RoleRouter from "../feature-modules/roles/roles.routes";
 import UserRouter from "../feature-modules/users/user.routes";
@@ -11,4 +11,9 @@ export const routes: Routes = [
     new Route("/user", UserRouter),
     new Route("/status", StatusRouter),
     new Route("/meter", MeterRouter)
+]
+
+export const excludedPaths = [
+    new excludedPath("/auth/login", "POST"),
+    new excludedPath("/auth/register", "POST")
 ]
