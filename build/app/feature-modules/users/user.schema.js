@@ -26,16 +26,6 @@ const UserSchema = new base_schema_1.BaseSchema({
         type: mongoose_1.Schema.Types.Mixed,
         required: false
     },
-    bill: {
-        type: Number,
-        required: false,
-        default: 0
-    },
-    outstanding_bill: {
-        type: Number,
-        required: false,
-        default: 0
-    },
     location: {
         type: String,
         required: false
@@ -49,6 +39,11 @@ const UserSchema = new base_schema_1.BaseSchema({
         type: mongoose_1.Schema.Types.ObjectId,
         required: false,
         ref: "Users"
+    },
+    bill: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        required: false,
+        ref: "Bill"
     }
 });
 exports.UserModel = (0, mongoose_1.model)("Users", UserSchema);

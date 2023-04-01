@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Route = void 0;
+exports.excludedPath = exports.Route = void 0;
 class Route {
     constructor(path, router) {
         this.path = path;
@@ -8,3 +8,10 @@ class Route {
     }
 }
 exports.Route = Route;
+class excludedPath {
+    constructor(path, method) {
+        this.path = path;
+        this.method = method;
+    }
+}
+exports.excludedPath = excludedPath;

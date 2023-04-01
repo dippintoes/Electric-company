@@ -1,11 +1,12 @@
-import { Schema, model } from "mongoose";
-import { BaseSchema } from "../../utility/base-schema";
-import { Status } from "../status/status.types";
-import { IBill } from "./bill.types";
-
-const BillSchema = new BaseSchema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BillModel = void 0;
+const mongoose_1 = require("mongoose");
+const base_schema_1 = require("../../utility/base-schema");
+const status_types_1 = require("../status/status.types");
+const BillSchema = new base_schema_1.BaseSchema({
     client_id: {
-        type: Schema.Types.ObjectId,
+        type: mongoose_1.Schema.Types.ObjectId,
         ref: "Users",
         required: true,
     },
@@ -28,9 +29,9 @@ const BillSchema = new BaseSchema({
         default: 0
     },
     payment_status: {
-        type: Schema.Types.ObjectId,
+        type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        default: Status.Pending,
+        default: status_types_1.Status.Pending,
         ref: "Status"
     },
     pics: {
@@ -38,7 +39,4 @@ const BillSchema = new BaseSchema({
         required: true
     }
 });
-
-type BillDocument = IBill & Document;
-
-export const BillModel = model<BillDocument>("Bill", BillSchema);
+exports.BillModel = (0, mongoose_1.model)("Bill", BillSchema);

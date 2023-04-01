@@ -9,6 +9,12 @@ const create = (meter) => {
     const new_meter = meter_repo_1.default.create(meter);
     return new_meter;
 };
+const findOne = (filter) => {
+    const all_meters = meter_repo_1.default.findOne(filter);
+    if (!all_meters)
+        throw meter_responses_1.METER_RESPONSES.NO_METERS_YET;
+    return all_meters;
+};
 const findAll = () => {
     const all_meters = meter_repo_1.default.find();
     if (!all_meters)
@@ -23,6 +29,7 @@ const deleteMeter = (id) => {
 };
 exports.default = {
     create,
+    findOne,
     findAll,
     deleteMeter
 };

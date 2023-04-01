@@ -7,7 +7,7 @@ const create = (user: IUser) => UserModel.create(user);
 const findOne = async (filter: Partial<IUser>) => {
     try {
         return await UserModel.findOne({
-            ...filter,
+            ...filter, isDeleted: false
         });
     }
     catch (e) {
@@ -15,7 +15,7 @@ const findOne = async (filter: Partial<IUser>) => {
     }
 }
 
-const findAll = (filter: FilterQuery<IUser>) => UserModel.find(filter);
+const findAll = (filter: FilterQuery<IUser>) => UserModel.find({ ...filter, isDeleted: false });
 
 const updateOne = async (id: string, update: Partial<IUser>) => {
     try {

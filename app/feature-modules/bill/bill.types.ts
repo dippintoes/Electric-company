@@ -1,11 +1,12 @@
-import { ObjectId } from "mongoose";
+import { ObjectId } from "bson";
 
 export interface IBill {
     _id?: ObjectId,
-    client_id: ObjectId,
+    client_id: string | ObjectId,
     reading: number,
-    total_Bill: number,
+    currentBill?: number,
     outStandingBill: number,
+    totalBill?: number,
     payment_status: ObjectId,
     pics: string[]
 }

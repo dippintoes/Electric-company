@@ -4,15 +4,19 @@ import { IBill } from "./bill.types";
 
 const create = (bill: IBill) => BillModel.create(bill);
 
-const findBill = async (filter: FilterQuery<IBill>) => await BillModel.findById(filter);
+const findBill = async (filter: FilterQuery<IBill>) => await BillModel.findOne(filter);
 
 const findAll = async (filter: FilterQuery<IBill>) => await BillModel.find(filter);
 
+const findSpecificBill = async (filter: FilterQuery<IBill>) => BillModel.find({ client_id: { $in: filter } }).sort({ createdAt: -1 }).limit(1);
+
 const deleteBill = async (filter: FilterQuery<IBill>, update: UpdateQuery<IBill>) => await BillModel.findOneAndUpdate(filter, update);
+
 
 export default {
     create,
     findBill,
     findAll,
+    findSpecificBill,
     deleteBill
 }

@@ -1,3 +1,4 @@
+import { FilterQuery } from "mongoose";
 import meterRepo from "./meter.repo";
 import { METER_RESPONSES } from "./meter.responses";
 import { IMeter } from "./meter.types";
@@ -5,6 +6,12 @@ import { IMeter } from "./meter.types";
 const create = (meter: IMeter) => {
     const new_meter = meterRepo.create(meter);
     return new_meter;
+}
+
+const findOne = (filter: FilterQuery<IMeter>) => {
+    const all_meters = meterRepo.findOne(filter);
+    if (!all_meters) throw METER_RESPONSES.NO_METERS_YET;
+    return all_meters;
 }
 
 const findAll = () => {
@@ -21,6 +28,7 @@ const deleteMeter = (id: string) => {
 
 export default {
     create,
+    findOne,
     findAll,
     deleteMeter
 }
