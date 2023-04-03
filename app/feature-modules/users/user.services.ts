@@ -26,8 +26,6 @@ const create = (user: IUser) => {
     return record;
 }
 
-const upload_images = async () => { }
-
 const findOne = async (filter: any) => {
     const user = await userRepo.findOne(filter);
     if (!user) throw USER_REPONSES.INVALID_CREDENTIALS;
@@ -72,7 +70,6 @@ export default {
     findOne,
     findAll,
     getMeterRevenue,
-    upload_images,
     findAllClients,
     findAllEmployees,
     deleteOne

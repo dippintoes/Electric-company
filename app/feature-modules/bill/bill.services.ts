@@ -1,5 +1,5 @@
 import mongoose, { FilterQuery, UpdateQuery, mongo } from "mongoose";
-import { IBill } from "./bill.types";
+import { IBill, IFILE } from "./bill.types";
 import billRepo from "./bill.repo";
 import { BILL_RESPONSES } from "./bill.responses";
 import userRepo from "../users/user.repo";
@@ -34,13 +34,14 @@ const updateBill = async (id: string, update: UpdateQuery<IBill>) => {
     return updatedBill;
 }
 
-const takeReading = async (id: string, bill: IBill) => {
+const takeReading = async (id: string, file: IFILE, bill: IBill) => {
     const client = await userRepo.findOne({ _id: new mongoose.mongo.ObjectId(bill.client_id) })
     const MeterType = await meterServices.findOne({ _id: new mongoose.mongo.ObjectId(client?.meterType) });
     if (!MeterType) throw { message: "Client does not have assigned meter", statusCode: 400 };
     else if ((client?.emp_id)?.toString() === id) {
         const rpu_reading = bill.reading * MeterType.rpu;
         bill.currentBill = rpu_reading;
+        bill.pics = file;
         bill.payment_status = Status.Pending;
         const exists = await billRepo.findSpecificBill(new mongoose.mongo.ObjectId(bill.client_id));
         console.log(exists);

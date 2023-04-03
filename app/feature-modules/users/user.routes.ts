@@ -3,6 +3,7 @@ import { checkRole } from "../../utility/check-role";
 import userServices from "./user.services";
 import mongoose from "mongoose";
 import { RESPONSE_HANDLER } from "../../utility/Response-handler";
+import { upload } from "../../utility/upload_images";
 
 const router = Router();
 
@@ -38,26 +39,6 @@ router.get("/findAllEmployees", checkRole(["6422a6020b6aa8e8006f277a"]), async (
 
 
 router.get("/meterRevenue/:id", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const result = await userServices.getMeterRevenue(req.params.id);
-        res.send(new RESPONSE_HANDLER(result));
-    }
-    catch (e) {
-        next(e);
-    }
-})
-
-router.get("/upload", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const result = await userServices.getMeterRevenue(req.params.id);
-        res.send(new RESPONSE_HANDLER(result));
-    }
-    catch (e) {
-        next(e);
-    }
-})
-
-router.post("/upload", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await userServices.getMeterRevenue(req.params.id);
         res.send(new RESPONSE_HANDLER(result));

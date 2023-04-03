@@ -8,5 +8,10 @@ export interface IBill {
     outStandingBill: number,
     totalBill: number,
     payment_status: ObjectId | string,
-    pics: string[]
+    pics: IFILE
+}
+
+export interface IFILE {
+    data: string | undefined;
+    contentType: string;
 }

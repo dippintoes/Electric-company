@@ -46,7 +46,7 @@ const updateBill = (id, update) => __awaiter(void 0, void 0, void 0, function* (
     const updatedBill = yield bill_repo_1.default.updateBill(id, update);
     return updatedBill;
 });
-const takeReading = (id, bill) => __awaiter(void 0, void 0, void 0, function* () {
+const takeReading = (id, file, bill) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const client = yield user_repo_1.default.findOne({ _id: new mongoose_1.default.mongo.ObjectId(bill.client_id) });
     const MeterType = yield meter_services_1.default.findOne({ _id: new mongoose_1.default.mongo.ObjectId(client === null || client === void 0 ? void 0 : client.meterType) });
@@ -55,6 +55,7 @@ const takeReading = (id, bill) => __awaiter(void 0, void 0, void 0, function* ()
     else if (((_a = (client === null || client === void 0 ? void 0 : client.emp_id)) === null || _a === void 0 ? void 0 : _a.toString()) === id) {
         const rpu_reading = bill.reading * MeterType.rpu;
         bill.currentBill = rpu_reading;
+        bill.pics = file;
         bill.payment_status = status_types_1.Status.Pending;
         const exists = yield bill_repo_1.default.findSpecificBill(new mongoose_1.default.mongo.ObjectId(bill.client_id));
         console.log(exists);
