@@ -34,8 +34,8 @@ const BillSchema = new BaseSchema({
         ref: "Status"
     },
     pics: {
-        data: Buffer,
-        contentType: String
+        type: [String],
+        required: true
     }
 });
 
