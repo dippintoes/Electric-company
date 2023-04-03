@@ -83,7 +83,9 @@ const updateStatus = async (client_id: string) => {
 };
 
 const outStandingRevenue = async () => {
+    console.log("start");
     const outStandingBills = await billRepo.findAll({ outStandingBill: { $gt: 0 }, isDeleted: false });
+    console.log(outStandingBills);
     const amount = outStandingBills.reduce((a, c) => a + c.outStandingBill, 0);
     return { "Total OutStanding Revenue": amount };
 }

@@ -4,11 +4,6 @@ import userRepo from "./user.repo";
 import { USER_REPONSES } from "./user.responses";
 import { IUser } from "./user.types";
 import { METER_TYPES } from "../meter/meter.types";
-import { Status } from "../status/status.types";
-import billServices from "../bill/bill.services";
-import { IBill } from "../bill/bill.types";
-import meterServices from "../meter/meter.services";
-import { BILL_RESPONSES } from "../bill/bill.responses";
 
 const create = (user: IUser) => {
     if (!user.role && user.meterType) {
@@ -37,6 +32,13 @@ const findOne = async (filter: any) => {
     return user;
 };
 
+const findAll = async () => {
+    const allUsers = await userRepo.findAll({ isDeleted: false });
+    if (!allUsers) throw USER_REPONSES.NO_USERS;
+    return allUsers;
+}
+
+
 const findAllClients = async () => {
     const allClients = await userRepo.findAll({ role: Roles.CLIENT, isDeleted: false });
     const totalRevenue = allClients.reduce((a, c) => a + Number(c.bill), 0);
@@ -50,6 +52,12 @@ const findAllEmployees = async () => {
     return allEmployees;
 }
 
+const getMeterRevenue = async (meterID: string) => {
+    const meterUsers = await userRepo.findAll({ meterType: new mongoose.mongo.ObjectId(meterID) });
+    const revenue = meterUsers.reduce((a, c) => a + Number(c.bill), 0);
+    return { "Given meter revenue is: ": revenue, "No. of users are: ": meterUsers.length };
+}
+
 const deleteOne = async (filter: FilterQuery<IUser>, update: UpdateQuery<IUser>) => {
     const restro = await userRepo.deleteOne(filter, update);
     if (!restro) throw USER_REPONSES.INVALID_CREDENTIALS;
@@ -60,6 +68,8 @@ const deleteOne = async (filter: FilterQuery<IUser>, update: UpdateQuery<IUser>)
 export default {
     create,
     findOne,
+    findAll,
+    getMeterRevenue,
     findAllClients,
     findAllEmployees,
     deleteOne

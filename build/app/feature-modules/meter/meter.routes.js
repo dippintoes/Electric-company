@@ -26,15 +26,6 @@ router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         next(e);
     }
 }));
-router.get("/meterRevenue/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield meter_services_1.default.getMeterRevenue(req.params.id);
-        res.send(new Response_handler_1.RESPONSE_HANDLER(result));
-    }
-    catch (e) {
-        next(e);
-    }
-}));
 router.get("/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield meter_services_1.default.findOne({ _id: new mongoose_1.default.mongo.ObjectId(req.params.id) });

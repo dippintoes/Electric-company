@@ -15,17 +15,6 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     }
 })
 
-
-router.get("/meterRevenue/:id", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const result = await meterServices.getMeterRevenue(req.params.id);
-        res.send(new RESPONSE_HANDLER(result));
-    }
-    catch (e) {
-        next(e);
-    }
-})
-
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await meterServices.findOne({ _id: new mongoose.mongo.ObjectId(req.params.id) });

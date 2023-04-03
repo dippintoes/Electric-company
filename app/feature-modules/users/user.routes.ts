@@ -6,6 +6,16 @@ import { RESPONSE_HANDLER } from "../../utility/Response-handler";
 
 const router = Router();
 
+router.get("/", checkRole(["6422a6020b6aa8e8006f277a"]), async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userServices.findAll();
+        res.send(new RESPONSE_HANDLER(result));
+    }
+    catch (e) {
+        next(e);
+    }
+})
+
 router.get("/findAllClients", checkRole(["6422a6020b6aa8e8006f277a"]), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await userServices.findAllClients();
@@ -19,6 +29,17 @@ router.get("/findAllClients", checkRole(["6422a6020b6aa8e8006f277a"]), async (re
 router.get("/findAllEmployees", checkRole(["6422a6020b6aa8e8006f277a"]), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await userServices.findAllEmployees();
+        res.send(new RESPONSE_HANDLER(result));
+    }
+    catch (e) {
+        next(e);
+    }
+})
+
+
+router.get("/meterRevenue/:id", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userServices.getMeterRevenue(req.params.id);
         res.send(new RESPONSE_HANDLER(result));
     }
     catch (e) {

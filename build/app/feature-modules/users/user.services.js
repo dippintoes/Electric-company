@@ -43,6 +43,12 @@ const findOne = (filter) => __awaiter(void 0, void 0, void 0, function* () {
         throw user_responses_1.USER_REPONSES.INVALID_CREDENTIALS;
     return user;
 });
+const findAll = () => __awaiter(void 0, void 0, void 0, function* () {
+    const allUsers = yield user_repo_1.default.findAll({ isDeleted: false });
+    if (!allUsers)
+        throw user_responses_1.USER_REPONSES.NO_USERS;
+    return allUsers;
+});
 const findAllClients = () => __awaiter(void 0, void 0, void 0, function* () {
     const allClients = yield user_repo_1.default.findAll({ role: roles_types_1.Roles.CLIENT, isDeleted: false });
     const totalRevenue = allClients.reduce((a, c) => a + Number(c.bill), 0);
@@ -56,6 +62,11 @@ const findAllEmployees = () => __awaiter(void 0, void 0, void 0, function* () {
         throw user_responses_1.USER_REPONSES.NO_USERS;
     return allEmployees;
 });
+const getMeterRevenue = (meterID) => __awaiter(void 0, void 0, void 0, function* () {
+    const meterUsers = yield user_repo_1.default.findAll({ meterType: new mongoose_1.default.mongo.ObjectId(meterID) });
+    const revenue = meterUsers.reduce((a, c) => a + Number(c.bill), 0);
+    return { "Given meter revenue is: ": revenue, "No. of users are: ": meterUsers.length };
+});
 const deleteOne = (filter, update) => __awaiter(void 0, void 0, void 0, function* () {
     const restro = yield user_repo_1.default.deleteOne(filter, update);
     if (!restro)
@@ -67,6 +78,8 @@ const deleteOne = (filter, update) => __awaiter(void 0, void 0, void 0, function
 exports.default = {
     create,
     findOne,
+    findAll,
+    getMeterRevenue,
     findAllClients,
     findAllEmployees,
     deleteOne

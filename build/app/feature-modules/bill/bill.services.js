@@ -95,7 +95,9 @@ const updateStatus = (client_id) => __awaiter(void 0, void 0, void 0, function* 
     return bill;
 });
 const outStandingRevenue = () => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("start");
     const outStandingBills = yield bill_repo_1.default.findAll({ outStandingBill: { $gt: 0 }, isDeleted: false });
+    console.log(outStandingBills);
     const amount = outStandingBills.reduce((a, c) => a + c.outStandingBill, 0);
     return { "Total OutStanding Revenue": amount };
 });
