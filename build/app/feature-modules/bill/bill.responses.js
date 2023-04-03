@@ -9,5 +9,13 @@ exports.BILL_RESPONSES = {
     NO_BILLS: {
         message: "No bills in the database",
         statusCode: 404
+    },
+    NO_OUTSTANDING_BILL: {
+        message: "no outstanding amount on bill. All Clear",
+        statusCode: 400
+    },
+    ALREADY_PAID: {
+        message: "Bill is already paid",
+        statusCode: 400
     }
 };

@@ -12,7 +12,7 @@ const checkRole = (roles) => {
                     return next();
                 }
             }
-            return next({ message: "Unauthorised", statusCode: 401 });
+            return next({ message: "Unauthorised user", statusCode: 401 });
         }
         catch (e) {
             next(e);

@@ -10,5 +10,5 @@ export const USER_REPONSES = {
     NO_USERS: {
         message: "No users found in the database",
         statusCode: 400
-    },
+    }
 }

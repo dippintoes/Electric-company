@@ -1,4 +1,4 @@
-import { FilterQuery, UpdateQuery } from "mongoose";
+import mongoose, { FilterQuery, UpdateQuery } from "mongoose";
 import { UserModel } from "./user.schema";
 import { IUser } from "./user.types";
 
@@ -19,7 +19,7 @@ const findAll = (filter: FilterQuery<IUser>) => UserModel.find({ ...filter, isDe
 
 const updateOne = async (id: string, update: Partial<IUser>) => {
     try {
-        return await UserModel.findOneAndUpdate({ _id: id }, { $set: update });
+        return await UserModel.findOneAndUpdate({ _id: new mongoose.mongo.ObjectId(id) }, { $set: update });
     }
     catch (e) {
         throw { message: "Something went wrong" }

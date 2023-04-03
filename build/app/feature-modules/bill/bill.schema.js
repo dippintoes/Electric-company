@@ -29,7 +29,7 @@ const BillSchema = new base_schema_1.BaseSchema({
         default: 0
     },
     payment_status: {
-        type: mongoose_1.Schema.Types.ObjectId,
+        type: mongoose_1.Schema.Types.Mixed,
         required: true,
         default: status_types_1.Status.Pending,
         ref: "Status"

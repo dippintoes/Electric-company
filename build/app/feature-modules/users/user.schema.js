@@ -41,9 +41,9 @@ const UserSchema = new base_schema_1.BaseSchema({
         ref: "Users"
     },
     bill: {
-        type: mongoose_1.Schema.Types.ObjectId,
+        type: Number,
         required: false,
-        ref: "Bill"
+        default: 0
     }
 });
 exports.UserModel = (0, mongoose_1.model)("Users", UserSchema);

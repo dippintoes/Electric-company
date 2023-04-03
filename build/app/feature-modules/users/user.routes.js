@@ -36,6 +36,15 @@ router.get("/findAllEmployees", (0, check_role_1.checkRole)(["6422a6020b6aa8e800
         next(e);
     }
 }));
+router.delete("/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_services_1.default.deleteOne({ _id: req.params.id }, { $set: { isDeleted: true } });
+        res.send(new Response_handler_1.RESPONSE_HANDLER(result));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
 router.get("/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = res.locals.tokenId;
@@ -44,25 +53,6 @@ router.get("/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             throw { message: "Unauthorized User", statusCode: 400 };
         else
             res.send(new Response_handler_1.RESPONSE_HANDLER(result));
-    }
-    catch (e) {
-        next(e);
-    }
-}));
-router.post("/takeReading", (0, check_role_1.checkRole)(["6422a60f0b6aa8e8006f277e"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { id } = res.locals.tokenId;
-        const result = yield user_services_1.default.takeReading(id, req.body);
-        res.send(new Response_handler_1.RESPONSE_HANDLER(result));
-    }
-    catch (e) {
-        next(e);
-    }
-}));
-router.delete("/:id", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield user_services_1.default.deleteOne({ _id: req.params.id }, { $set: { isDeleted: true } });
-        res.send(new Response_handler_1.RESPONSE_HANDLER(result));
     }
     catch (e) {
         next(e);

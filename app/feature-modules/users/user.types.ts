@@ -9,7 +9,7 @@ export interface IUser {
     meterType?: ObjectId | string,
     location: string,
     emp_id?: ObjectId,
-    bill?: string
+    bill?: number
 }
 
 export type Users = IUser[];

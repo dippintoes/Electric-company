@@ -8,21 +8,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importDefault(require("mongoose"));
 const user_schema_1 = require("./user.schema");
 const create = (user) => user_schema_1.UserModel.create(user);
 const findOne = (filter) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        return yield user_schema_1.UserModel.findOne(Object.assign({}, filter));
+        return yield user_schema_1.UserModel.findOne(Object.assign(Object.assign({}, filter), { isDeleted: false }));
     }
     catch (e) {
         throw { message: "Something went wrong" };
     }
 });
-const findAll = (filter) => user_schema_1.UserModel.find(filter);
+const findAll = (filter) => user_schema_1.UserModel.find(Object.assign(Object.assign({}, filter), { isDeleted: false }));
 const updateOne = (id, update) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        return yield user_schema_1.UserModel.findOneAndUpdate({ _id: id }, { $set: update });
+        return yield user_schema_1.UserModel.findOneAndUpdate({ _id: new mongoose_1.default.mongo.ObjectId(id) }, { $set: update });
     }
     catch (e) {
         throw { message: "Something went wrong" };

@@ -40,9 +40,9 @@ const UserSchema = new BaseSchema({
         ref: "Users"
     },
     bill: {
-        type: Schema.Types.ObjectId,
+        type: Number,
         required: false,
-        ref: "Bill"
+        default: 0
     }
 })
 

@@ -28,7 +28,7 @@ const BillSchema = new BaseSchema({
         default: 0
     },
     payment_status: {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.Mixed,
         required: true,
         default: Status.Pending,
         ref: "Status"

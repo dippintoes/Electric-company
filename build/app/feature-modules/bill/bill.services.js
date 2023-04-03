@@ -15,6 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const bill_repo_1 = __importDefault(require("./bill.repo"));
 const bill_responses_1 = require("./bill.responses");
+const user_repo_1 = __importDefault(require("../users/user.repo"));
+const meter_services_1 = __importDefault(require("../meter/meter.services"));
+const status_types_1 = require("../status/status.types");
 const create = (bill) => {
     if (bill.client_id)
         bill.client_id = new mongoose_1.default.mongo.ObjectId(bill.client_id);
@@ -28,7 +31,7 @@ const findBill = (filter) => __awaiter(void 0, void 0, void 0, function* () {
     return foundBill;
 });
 const findAll = (filter) => __awaiter(void 0, void 0, void 0, function* () {
-    const foundedBills = yield bill_repo_1.default.findAll(filter);
+    const foundedBills = yield bill_repo_1.default.findAll(Object.assign(Object.assign({}, filter), { isDeleted: false }));
     if (!foundedBills)
         throw bill_responses_1.BILL_RESPONSES.NO_BILLS;
     return foundedBills;
@@ -39,6 +42,63 @@ const findSpecificBill = (filter) => __awaiter(void 0, void 0, void 0, function*
         throw bill_responses_1.BILL_RESPONSES.NO_BILLS;
     return foundedBills;
 });
+const updateBill = (id, update) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedBill = yield bill_repo_1.default.updateBill(id, update);
+    return updatedBill;
+});
+const takeReading = (id, bill) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const client = yield user_repo_1.default.findOne({ _id: new mongoose_1.default.mongo.ObjectId(bill.client_id) });
+    const MeterType = yield meter_services_1.default.findOne({ _id: new mongoose_1.default.mongo.ObjectId(client === null || client === void 0 ? void 0 : client.meterType) });
+    if (!MeterType)
+        throw { message: "Client does not have assigned meter", statusCode: 400 };
+    else if (((_a = (client === null || client === void 0 ? void 0 : client.emp_id)) === null || _a === void 0 ? void 0 : _a.toString()) === id) {
+        const rpu_reading = bill.reading * MeterType.rpu;
+        bill.currentBill = rpu_reading;
+        bill.payment_status = status_types_1.Status.Pending;
+        const exists = yield bill_repo_1.default.findSpecificBill(new mongoose_1.default.mongo.ObjectId(bill.client_id));
+        console.log(exists);
+        if (exists.length != 0) {
+            if (exists[0].payment_status.toString() === status_types_1.Status.Pending.toString()) {
+                bill.outStandingBill = exists[0].outStandingBill + bill.currentBill;
+                bill.totalBill = bill.currentBill + bill.outStandingBill;
+            }
+        }
+        else {
+            bill.outStandingBill = 0;
+            bill.totalBill = bill.currentBill;
+        }
+        yield user_repo_1.default.updateOne(bill.client_id.toString(), { bill: bill.totalBill });
+        const newBill = yield bill_repo_1.default.create(bill);
+        yield user_repo_1.default.updateOne(id, { bill: bill.totalBill });
+        return newBill;
+    }
+    else {
+        throw { message: "UnAuthorized access", statusCode: 401 };
+    }
+});
+const updateStatus = (client_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const bill = yield bill_repo_1.default.findAll({ client_id: new mongoose_1.default.mongo.ObjectId(client_id) });
+    console.log(bill);
+    if (bill.length == 0) {
+        throw bill_responses_1.BILL_RESPONSES.NO_OUTSTANDING_BILL;
+    }
+    else if (bill[bill.length - 1].payment_status.toString() === status_types_1.Status.Paid.toString()) {
+        throw bill_responses_1.BILL_RESPONSES.ALREADY_PAID;
+    }
+    else {
+        bill.forEach((item) => bill_repo_1.default.updateBill(item._id.toString(), { payment_status: status_types_1.Status.Paid, outStandingBill: 0 }));
+    }
+    console.log(bill);
+    if (!bill)
+        throw bill_responses_1.BILL_RESPONSES.BILL_NOT_FOUND;
+    return bill;
+});
+const outStandingRevenue = () => __awaiter(void 0, void 0, void 0, function* () {
+    const outStandingBills = yield bill_repo_1.default.findAll({ outStandingBill: { $gt: 0 }, isDeleted: false });
+    const amount = outStandingBills.reduce((a, c) => a + c.outStandingBill, 0);
+    return { "Total OutStanding Revenue": amount };
+});
 const deleteBill = (filter, update) => __awaiter(void 0, void 0, void 0, function* () {
     const deletedBill = yield bill_repo_1.default.deleteBill(filter, update);
     return deleteBill;
@@ -48,5 +108,9 @@ exports.default = {
     findBill,
     findAll,
     findSpecificBill,
+    updateBill,
+    takeReading,
+    updateStatus,
+    outStandingRevenue,
     deleteBill
 };

@@ -13,49 +13,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const meter_services_1 = __importDefault(require("./meter.services"));
+const check_role_1 = require("../../utility/check-role");
+const bill_services_1 = __importDefault(require("./bill.services"));
 const Response_handler_1 = require("../../utility/Response-handler");
-const mongoose_1 = __importDefault(require("mongoose"));
 const router = (0, express_1.Router)();
-router.get("/", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/outStandingRevenue", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield meter_services_1.default.findAll();
+        const result = yield bill_services_1.default.outStandingRevenue();
         res.send(new Response_handler_1.RESPONSE_HANDLER(result));
     }
     catch (e) {
         next(e);
     }
 }));
-router.get("/meterRevenue/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/updateStatus/:id", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield meter_services_1.default.getMeterRevenue(req.params.id);
+        const client_id = req.params.id;
+        const result = yield bill_services_1.default.updateStatus(client_id);
         res.send(new Response_handler_1.RESPONSE_HANDLER(result));
     }
     catch (e) {
         next(e);
     }
 }));
-router.get("/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/takeReading", (0, check_role_1.checkRole)(["6422a60f0b6aa8e8006f277e"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield meter_services_1.default.findOne({ _id: new mongoose_1.default.mongo.ObjectId(req.params.id) });
-        res.send(new Response_handler_1.RESPONSE_HANDLER(result));
-    }
-    catch (e) {
-        next(e);
-    }
-}));
-router.post("/create", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield meter_services_1.default.create(req.body);
-        res.send(new Response_handler_1.RESPONSE_HANDLER(result));
-    }
-    catch (e) {
-        next(e);
-    }
-}));
-router.delete("/delete/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield meter_services_1.default.deleteMeter(req.params.id);
+        const { id } = res.locals.tokenId;
+        const result = yield bill_services_1.default.takeReading(id, req.body);
         res.send(new Response_handler_1.RESPONSE_HANDLER(result));
     }
     catch (e) {

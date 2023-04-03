@@ -26,33 +26,22 @@ router.get("/findAllEmployees", checkRole(["6422a6020b6aa8e8006f277a"]), async (
     }
 })
 
+router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userServices.deleteOne({ _id: req.params.id }, { $set: { isDeleted: true } });
+        res.send(new RESPONSE_HANDLER(result));
+    }
+    catch (e) {
+        next(e);
+    }
+})
+
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = res.locals.tokenId;
         const result = await userServices.findOne({ _id: new mongoose.Types.ObjectId((req.params.id).toString()), isDeleted: false });
         if (id.toString() !== result._id.toString()) throw { message: "Unauthorized User", statusCode: 400 };
         else res.send(new RESPONSE_HANDLER(result));
-    }
-    catch (e) {
-        next(e);
-    }
-})
-
-router.post("/takeReading", checkRole(["6422a60f0b6aa8e8006f277e"]), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { id } = res.locals.tokenId;
-        const result = await userServices.takeReading(id, req.body);
-        res.send(new RESPONSE_HANDLER(result));
-    }
-    catch (e) {
-        next(e);
-    }
-})
-
-router.delete("/:id", checkRole(["6422a6020b6aa8e8006f277a"]), async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const result = await userServices.deleteOne({ _id: req.params.id }, { $set: { isDeleted: true } });
-        res.send(new RESPONSE_HANDLER(result));
     }
     catch (e) {
         next(e);
