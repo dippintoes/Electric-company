@@ -47,6 +47,26 @@ router.get("/meterRevenue/:id", async (req: Request, res: Response, next: NextFu
     }
 })
 
+router.get("/upload", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userServices.getMeterRevenue(req.params.id);
+        res.send(new RESPONSE_HANDLER(result));
+    }
+    catch (e) {
+        next(e);
+    }
+})
+
+router.post("/upload", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userServices.getMeterRevenue(req.params.id);
+        res.send(new RESPONSE_HANDLER(result));
+    }
+    catch (e) {
+        next(e);
+    }
+})
+
 router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await userServices.deleteOne({ _id: req.params.id }, { $set: { isDeleted: true } });
