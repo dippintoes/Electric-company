@@ -37,15 +37,14 @@ router.patch("/updateStatus/:id", (0, check_role_1.checkRole)(["6422a6020b6aa8e8
         next(e);
     }
 }));
-router.post("/takeReading", (0, check_role_1.checkRole)(["6422a60f0b6aa8e8006f277e"]), upload_images_1.upload.single("image"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+router.post("/takeReading", (0, check_role_1.checkRole)(["6422a60f0b6aa8e8006f277e"]), upload_images_1.upload.array("image", 20), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = res.locals.tokenId;
-        const file = {
-            data: (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename,
-            contentType: "image/png"
-        };
-        const result = yield bill_services_1.default.takeReading(id, file, req.body);
+        if (!req.files) {
+            throw { message: "No images selected", statusCode: 400 };
+        }
+        const images = req.files;
+        const result = yield bill_services_1.default.takeReading(id, images, req.body);
         res.send(new Response_handler_1.RESPONSE_HANDLER(result));
     }
     catch (e) {

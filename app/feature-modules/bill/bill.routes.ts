@@ -27,14 +27,14 @@ router.patch("/updateStatus/:id", checkRole(["6422a6020b6aa8e8006f277a"]), async
     }
 })
 
-router.post("/takeReading", checkRole(["6422a60f0b6aa8e8006f277e"]), upload.single("image"), async (req: Request, res: Response, next: NextFunction) => {
+router.post("/takeReading", checkRole(["6422a60f0b6aa8e8006f277e"]), upload.array("image", 20), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = res.locals.tokenId;
-        const file = {
-            data: req.file?.filename,
-            contentType: "image/png"
+        if (!req.files) {
+            throw { message: "No images selected", statusCode: 400 };
         }
-        const result = await billServices.takeReading(id, file, req.body);
+        const images = req.files;
+        const result = await billServices.takeReading(id, images, req.body);
         res.send(new RESPONSE_HANDLER(result));
     }
     catch (e) {

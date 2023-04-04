@@ -35,8 +35,8 @@ const BillSchema = new base_schema_1.BaseSchema({
         ref: "Status"
     },
     pics: {
-        data: Buffer,
-        contentType: String
+        type: [String],
+        required: true
     }
 });
 exports.BillModel = (0, mongoose_1.model)("Bill", BillSchema);
