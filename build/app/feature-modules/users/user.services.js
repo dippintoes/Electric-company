@@ -18,21 +18,26 @@ const user_repo_1 = __importDefault(require("./user.repo"));
 const user_responses_1 = require("./user.responses");
 const meter_types_1 = require("../meter/meter.types");
 const create = (user) => {
-    if (!user.role && user.meterType) {
+    var _a;
+    if (user.role && ((_a = user.role) === null || _a === void 0 ? void 0 : _a.toString()) == "ADMIN") {
+        user.role = roles_types_1.Roles.ADMIN;
+        console.log(user.role);
+    }
+    else if (!user.role && user.meterType) {
         user.role = roles_types_1.Roles.CLIENT;
         user.emp_id = new mongoose_1.default.mongo.ObjectId(user.emp_id);
+        if (user.meterType === "Normal") {
+            user.meterType = meter_types_1.METER_TYPES.NORMAL;
+        }
+        else if (user.meterType === "Commercial") {
+            user.meterType = meter_types_1.METER_TYPES.COMMERCIAL;
+        }
+        else {
+            user.meterType = meter_types_1.METER_TYPES.SOLAR;
+        }
     }
     else if (!user.role) {
         user.role = roles_types_1.Roles.EMPLOYEE;
-    }
-    if (user.meterType === "Normal") {
-        user.meterType = meter_types_1.METER_TYPES.NORMAL;
-    }
-    else if (user.meterType === "Commercial") {
-        user.meterType = meter_types_1.METER_TYPES.COMMERCIAL;
-    }
-    else {
-        user.meterType = meter_types_1.METER_TYPES.SOLAR;
     }
     const record = user_repo_1.default.create(user);
     return record;
@@ -50,22 +55,37 @@ const findAll = () => __awaiter(void 0, void 0, void 0, function* () {
     return allUsers;
 });
 const findAllClients = () => __awaiter(void 0, void 0, void 0, function* () {
-    const allClients = yield user_repo_1.default.findAll({ role: roles_types_1.Roles.CLIENT, isDeleted: false });
+    const allClients = yield user_repo_1.default.findAll({
+        role: roles_types_1.Roles.CLIENT,
+        isDeleted: false,
+    });
     const totalRevenue = allClients.reduce((a, c) => a + Number(c.bill), 0);
     if (!allClients)
         throw user_responses_1.USER_REPONSES.NO_USERS;
     return Object.assign(Object.assign({}, allClients), { totalRevenue: totalRevenue });
 });
 const findAllEmployees = () => __awaiter(void 0, void 0, void 0, function* () {
-    const allEmployees = yield user_repo_1.default.findAll({ role: roles_types_1.Roles.EMPLOYEE, isDeleted: false });
+    const allEmployees = yield user_repo_1.default
+        .findAll({
+        role: roles_types_1.Roles.EMPLOYEE,
+        isDeleted: false,
+    })
+        .populate("Roles")
+        .populate("Status")
+        .populate("Users");
     if (!allEmployees)
         throw user_responses_1.USER_REPONSES.NO_USERS;
     return allEmployees;
 });
 const getMeterRevenue = (meterID) => __awaiter(void 0, void 0, void 0, function* () {
-    const meterUsers = yield user_repo_1.default.findAll({ meterType: new mongoose_1.default.mongo.ObjectId(meterID) });
+    const meterUsers = yield user_repo_1.default.findAll({
+        meterType: new mongoose_1.default.mongo.ObjectId(meterID),
+    });
     const revenue = meterUsers.reduce((a, c) => a + Number(c.bill), 0);
-    return { "Given meter revenue is: ": revenue, "No. of users are: ": meterUsers.length };
+    return {
+        "Given meter revenue is: ": revenue,
+        "No. of users are: ": meterUsers.length,
+    };
 });
 const deleteOne = (filter, update) => __awaiter(void 0, void 0, void 0, function* () {
     const restro = yield user_repo_1.default.deleteOne(filter, update);
@@ -82,5 +102,5 @@ exports.default = {
     getMeterRevenue,
     findAllClients,
     findAllEmployees,
-    deleteOne
+    deleteOne,
 };

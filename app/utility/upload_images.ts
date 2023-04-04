@@ -1,27 +1,24 @@
-import multer from "multer"
-
-const storage = multer.diskStorage({
+import multer from "multer";
+export const upload = multer({
+  storage: multer.diskStorage({
     destination: "./images",
     filename: (req, file, cb) => {
-        console.log(file);
-        cb(null, Date.now() + file.originalname)
+      cb(null, `${Date.now()}--${file.originalname}`);
+    },
+  }),
+  //   limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype == "image/png" ||
+      file.mimetype == "image/jpg" ||
+      file.mimetype == "image/jpeg"
+    ) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      const err = new Error("Only .png, .jpg and .jpeg format allowed!");
+      err.name = "ExtensionError";
+      return cb(err);
     }
-})
-
-export const upload = multer({
-    storage: storage, fileFilter: (req, file, cb) => {
-        if (
-            file.mimetype == 'image/jpeg' ||
-            file.mimetype == 'image/jpg' ||
-            file.mimetype == 'image/png' ||
-            file.mimetype == 'image/gif'
-
-        ) {
-            cb(null, true)
-        }
-        else {
-            cb(null, false);
-            cb(new Error('Only jpeg,  jpg , png, and gif Image allow'))
-        }
-    }
-})
+  },
+});

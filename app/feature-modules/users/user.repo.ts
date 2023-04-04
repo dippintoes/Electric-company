@@ -5,34 +5,40 @@ import { IUser } from "./user.types";
 const create = (user: IUser) => UserModel.create(user);
 
 const findOne = async (filter: Partial<IUser>) => {
-    try {
-        return await UserModel.findOne({
-            ...filter, isDeleted: false
-        });
-    }
-    catch (e) {
-        throw { message: "Something went wrong" }
-    }
-}
+  try {
+    return await UserModel.findOne({
+      ...filter,
+      isDeleted: false,
+    });
+  } catch (e) {
+    throw { message: "Something went wrong" };
+  }
+};
 
-const findAll = (filter: FilterQuery<IUser>) => UserModel.find({ ...filter, isDeleted: false });
+const findAll = (filter: FilterQuery<IUser>) =>
+  UserModel.find({ ...filter, isDeleted: false })
+    .populate("role")
+    .populate("meterType")
+    .populate("emp_id");
 
 const updateOne = async (id: string, update: Partial<IUser>) => {
-    try {
-        return await UserModel.findOneAndUpdate({ _id: new mongoose.mongo.ObjectId(id) }, { $set: update });
-    }
-    catch (e) {
-        throw { message: "Something went wrong" }
-    }
-}
+  try {
+    return await UserModel.findOneAndUpdate(
+      { _id: new mongoose.mongo.ObjectId(id) },
+      { $set: update }
+    );
+  } catch (e) {
+    throw { message: "Something went wrong" };
+  }
+};
 
 const deleteOne = (filter: FilterQuery<IUser>, update: UpdateQuery<IUser>) =>
-    UserModel.findOneAndUpdate(filter, update, { new: true });
+  UserModel.findOneAndUpdate(filter, update, { new: true });
 
 export default {
-    create,
-    findOne,
-    findAll,
-    updateOne,
-    deleteOne
-}
+  create,
+  findOne,
+  findAll,
+  updateOne,
+  deleteOne,
+};

@@ -18,6 +18,7 @@ const bill_responses_1 = require("./bill.responses");
 const user_repo_1 = __importDefault(require("../users/user.repo"));
 const meter_services_1 = __importDefault(require("../meter/meter.services"));
 const status_types_1 = require("../status/status.types");
+const user_services_1 = __importDefault(require("../users/user.services"));
 const create = (bill) => {
     if (bill.client_id)
         bill.client_id = new mongoose_1.default.mongo.ObjectId(bill.client_id);
@@ -48,17 +49,28 @@ const updateBill = (id, update) => __awaiter(void 0, void 0, void 0, function* (
 });
 const takeReading = (id, files, bill) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const client = yield user_repo_1.default.findOne({ _id: new mongoose_1.default.mongo.ObjectId(bill.client_id) });
-    const MeterType = yield meter_services_1.default.findOne({ _id: new mongoose_1.default.mongo.ObjectId(client === null || client === void 0 ? void 0 : client.meterType) });
+    const client = yield user_services_1.default.findOne({
+        _id: new mongoose_1.default.mongo.ObjectId(bill.client_id),
+    });
+    const MeterType = yield meter_services_1.default.findOne({
+        _id: new mongoose_1.default.mongo.ObjectId(client === null || client === void 0 ? void 0 : client.meterType),
+    });
     if (!MeterType)
         throw { message: "Client does not have assigned meter", statusCode: 400 };
-    else if (((_a = (client === null || client === void 0 ? void 0 : client.emp_id)) === null || _a === void 0 ? void 0 : _a.toString()) === id) {
+    else if (((_a = client === null || client === void 0 ? void 0 : client.emp_id) === null || _a === void 0 ? void 0 : _a.toString()) === id) {
         const rpu_reading = bill.reading * MeterType.rpu;
         bill.currentBill = rpu_reading;
-        files.forEach((img) => {
-            bill.pics.push(img.name);
-        });
-        console.log(bill.pics);
+        if (files.length === MeterType.default_pics) {
+            const temp = [];
+            files.forEach((img) => temp.push(img.filename));
+            bill.pics = temp.slice(0);
+        }
+        else {
+            throw {
+                message: "Please enter : 20 pics for Normal, 8 for Commercial and 1 for Solar",
+                statusCode: 400,
+            };
+        }
         bill.payment_status = status_types_1.Status.Pending;
         const exists = yield bill_repo_1.default.findSpecificBill(new mongoose_1.default.mongo.ObjectId(bill.client_id));
         console.log(exists);
@@ -72,7 +84,9 @@ const takeReading = (id, files, bill) => __awaiter(void 0, void 0, void 0, funct
             bill.outStandingBill = 0;
             bill.totalBill = bill.currentBill;
         }
-        yield user_repo_1.default.updateOne(bill.client_id.toString(), { bill: bill.totalBill });
+        yield user_repo_1.default.updateOne(bill.client_id.toString(), {
+            bill: bill.totalBill,
+        });
         const newBill = yield bill_repo_1.default.create(bill);
         yield user_repo_1.default.updateOne(id, { bill: bill.totalBill });
         return newBill;
@@ -82,7 +96,9 @@ const takeReading = (id, files, bill) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 const updateStatus = (client_id) => __awaiter(void 0, void 0, void 0, function* () {
-    const bill = yield bill_repo_1.default.findAll({ client_id: new mongoose_1.default.mongo.ObjectId(client_id) });
+    const bill = yield bill_repo_1.default.findAll({
+        client_id: new mongoose_1.default.mongo.ObjectId(client_id),
+    });
     console.log(bill);
     if (bill.length == 0) {
         throw bill_responses_1.BILL_RESPONSES.NO_OUTSTANDING_BILL;
@@ -91,7 +107,10 @@ const updateStatus = (client_id) => __awaiter(void 0, void 0, void 0, function* 
         throw bill_responses_1.BILL_RESPONSES.ALREADY_PAID;
     }
     else {
-        bill.forEach((item) => bill_repo_1.default.updateBill(item._id.toString(), { payment_status: status_types_1.Status.Paid, outStandingBill: 0 }));
+        bill.forEach((item) => bill_repo_1.default.updateBill(item._id.toString(), {
+            payment_status: status_types_1.Status.Paid,
+            outStandingBill: 0,
+        }));
     }
     console.log(bill);
     if (!bill)
@@ -100,7 +119,10 @@ const updateStatus = (client_id) => __awaiter(void 0, void 0, void 0, function* 
 });
 const outStandingRevenue = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("start");
-    const outStandingBills = yield bill_repo_1.default.findAll({ outStandingBill: { $gt: 0 }, isDeleted: false });
+    const outStandingBills = yield bill_repo_1.default.findAll({
+        outStandingBill: { $gt: 0 },
+        isDeleted: false,
+    });
     console.log(outStandingBills);
     const amount = outStandingBills.reduce((a, c) => a + c.outStandingBill, 0);
     return { "Total OutStanding Revenue": amount };
@@ -118,5 +140,5 @@ exports.default = {
     takeReading,
     updateStatus,
     outStandingRevenue,
-    deleteBill
+    deleteBill,
 };

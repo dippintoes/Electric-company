@@ -18,7 +18,7 @@ const bill_services_1 = __importDefault(require("./bill.services"));
 const Response_handler_1 = require("../../utility/Response-handler");
 const upload_images_1 = require("../../utility/upload_images");
 const router = (0, express_1.Router)();
-router.get("/outStandingRevenue", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/outStandingRevenue", (0, check_role_1.checkRole)(["642c5b434a9c511fae1623d2"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield bill_services_1.default.outStandingRevenue();
         res.send(new Response_handler_1.RESPONSE_HANDLER(result));
@@ -27,7 +27,7 @@ router.get("/outStandingRevenue", (0, check_role_1.checkRole)(["6422a6020b6aa8e8
         next(e);
     }
 }));
-router.patch("/updateStatus/:id", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.patch("/updateStatus/:id", (0, check_role_1.checkRole)(["642c5b434a9c511fae1623d2"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const client_id = req.params.id;
         const result = yield bill_services_1.default.updateStatus(client_id);
@@ -37,7 +37,7 @@ router.patch("/updateStatus/:id", (0, check_role_1.checkRole)(["6422a6020b6aa8e8
         next(e);
     }
 }));
-router.post("/takeReading", (0, check_role_1.checkRole)(["6422a60f0b6aa8e8006f277e"]), upload_images_1.upload.array("image", 20), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/takeReading", upload_images_1.upload.array("pics"), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = res.locals.tokenId;
         if (!req.files) {

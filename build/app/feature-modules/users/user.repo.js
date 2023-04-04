@@ -23,7 +23,10 @@ const findOne = (filter) => __awaiter(void 0, void 0, void 0, function* () {
         throw { message: "Something went wrong" };
     }
 });
-const findAll = (filter) => user_schema_1.UserModel.find(Object.assign(Object.assign({}, filter), { isDeleted: false }));
+const findAll = (filter) => user_schema_1.UserModel.find(Object.assign(Object.assign({}, filter), { isDeleted: false }))
+    .populate("role")
+    .populate("meterType")
+    .populate("emp_id");
 const updateOne = (id, update) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return yield user_schema_1.UserModel.findOneAndUpdate({ _id: new mongoose_1.default.mongo.ObjectId(id) }, { $set: update });
@@ -38,5 +41,5 @@ exports.default = {
     findOne,
     findAll,
     updateOne,
-    deleteOne
+    deleteOne,
 };

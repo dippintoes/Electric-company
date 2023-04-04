@@ -18,7 +18,7 @@ const user_services_1 = __importDefault(require("./user.services"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const Response_handler_1 = require("../../utility/Response-handler");
 const router = (0, express_1.Router)();
-router.get("/", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/", (0, check_role_1.checkRole)(["642c5b434a9c511fae1623d2"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield user_services_1.default.findAll();
         res.send(new Response_handler_1.RESPONSE_HANDLER(result));
@@ -27,7 +27,7 @@ router.get("/", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req,
         next(e);
     }
 }));
-router.get("/findAllClients", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/findAllClients", (0, check_role_1.checkRole)(["642c5b434a9c511fae1623d2"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield user_services_1.default.findAllClients();
         res.send(new Response_handler_1.RESPONSE_HANDLER(result));
@@ -36,7 +36,7 @@ router.get("/findAllClients", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f
         next(e);
     }
 }));
-router.get("/findAllEmployees", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.get("/findAllEmployees", (0, check_role_1.checkRole)(["642c5b434a9c511fae1623d2"]), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield user_services_1.default.findAllEmployees();
         res.send(new Response_handler_1.RESPONSE_HANDLER(result));
@@ -66,7 +66,10 @@ router.delete("/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, func
 router.get("/:id", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = res.locals.tokenId;
-        const result = yield user_services_1.default.findOne({ _id: new mongoose_1.default.Types.ObjectId((req.params.id).toString()), isDeleted: false });
+        const result = yield user_services_1.default.findOne({
+            _id: new mongoose_1.default.Types.ObjectId(req.params.id.toString()),
+            isDeleted: false,
+        });
         if (id.toString() !== result._id.toString())
             throw { message: "Unauthorized User", statusCode: 400 };
         else

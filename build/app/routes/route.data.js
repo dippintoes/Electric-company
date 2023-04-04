@@ -17,8 +17,12 @@ exports.routes = [
     new route_types_1.Route("/user", user_routes_1.default),
     new route_types_1.Route("/status", status_routes_1.default),
     new route_types_1.Route("/meter", meter_routes_1.default),
-    new route_types_1.Route("/bill", bill_routes_1.default)
+    new route_types_1.Route("/bill", bill_routes_1.default),
 ];
 exports.excludedPaths = [
-    new route_types_1.excludedPath("/auth/login", "POST")
+    new route_types_1.excludedPath("/auth/login", "POST"),
+    new route_types_1.excludedPath("/auth/register", "POST"),
+    new route_types_1.excludedPath("/role/create", "POST"),
+    new route_types_1.excludedPath("/status/create", "POST"),
+    new route_types_1.excludedPath("/meter/create", "POST"),
 ];

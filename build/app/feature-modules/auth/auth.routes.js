@@ -16,7 +16,6 @@ const express_1 = require("express");
 const auth_services_1 = __importDefault(require("./auth.services"));
 const auth_validations_1 = require("./auth.validations");
 const Response_handler_1 = require("../../utility/Response-handler");
-const check_role_1 = require("../../utility/check-role");
 const router = (0, express_1.Router)();
 router.post("/login", auth_validations_1.LOGIN_USER_VALIDATION, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -29,7 +28,7 @@ router.post("/login", auth_validations_1.LOGIN_USER_VALIDATION, (req, res, next)
         next(e);
     }
 }));
-router.post("/register", (0, check_role_1.checkRole)(["6422a6020b6aa8e8006f277a"]), auth_validations_1.CREATE_USER_VALIDATION, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/register", auth_validations_1.CREATE_USER_VALIDATION, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield auth_services_1.default.register(req.body);
         res.send(new Response_handler_1.RESPONSE_HANDLER(result));
